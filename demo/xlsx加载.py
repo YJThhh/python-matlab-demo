@@ -14,14 +14,13 @@ def CalMATLAB(eng,data):
     return res
 
 
-def  XlsxLoad(path):
-    pass
+
 if __name__ == '__main__':
     # Step 1: init config and Logger and start matlab engine
     # MATLAB_eng = matlab.engine.start_matlab()
     # MATLAB_eng.addpath(MATLAB_eng.genpath(MATLAB_eng.fullfile(os.getcwd(),  'matlab')))
     # Step 2: load xlsx file
-    xlsx_detail_path= '../data/interpolate_test.xlsx'
+    xlsx_detail_path= '../data/20201115带时间热量.xlsx'
     if os.path.exists(xlsx_detail_path):
         data = pd.read_excel(xlsx_detail_path)
 
@@ -38,7 +37,7 @@ if __name__ == '__main__':
     print(helper)
     data = pd.merge(data, helper, on='datetime', how='outer').sort_values('datetime')
     #线性插值
-    data['value'] = data['value'].interpolate(method='linear')
+    data['value'] = data['value'].interpolate(method='polynomial', order=2)
     #打印插值结果
     print("data")
     print(data)
