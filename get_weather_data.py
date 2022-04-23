@@ -26,7 +26,7 @@ while GetNextDateString(next_date) != date_end:
 
 # Step 1: init dataframe
 dataFrame = pd.DataFrame(columns={"时次", "瞬时温度", "地面气压", "相对湿度", "瞬时风向", "瞬时风速", "1小时降水", "10分钟平均能见度"})
-dataFrame_index = 1
+
 all_table_text_content_list = []
 
 # Step 2: get heml tb
@@ -45,7 +45,7 @@ for date_string in date_list:
 
 # 计算有多少行数据（不包括首行）
 num_row = len(all_table_text_content_list) // 8
-print("***所有爬取完毕，总共" + str(num_row) + "天")
+print("***所有爬取完毕，总共" + str(num_row) + "行数据")
 # 然后一行行的向dataframe里面添加
 for i in range(num_row):
     # 先计算索引偏移

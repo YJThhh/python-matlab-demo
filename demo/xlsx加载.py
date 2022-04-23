@@ -6,7 +6,7 @@ import argparse
 from logging import handlers
 import numpy as np
 import pandas as pd
-
+from scipy import signal
 
 def CalMATLAB(eng,data):
     res = eng.pd_process(data)
@@ -20,17 +20,30 @@ if __name__ == '__main__':
     # MATLAB_eng = matlab.engine.start_matlab()
     # MATLAB_eng.addpath(MATLAB_eng.genpath(MATLAB_eng.fullfile(os.getcwd(),  'matlab')))
     # Step 2: load xlsx file
-    xlsx_detail_path= '../data/20201115带时间热量.xlsx'
+    xlsx_detail_path= '../data/20-21带时间热量.xlsx'
     if os.path.exists(xlsx_detail_path):
         data = pd.read_excel(xlsx_detail_path)
 
     assert data is not None
+
+
     #由于这个xlsx没有列名称，索引不是很方便，先更改列名称
     data.columns = ['datetime', 'value']
 
     #第一列转datetime
     # data.iloc[:,0]=pd.to_datetime(data.iloc[:,0]) #按序号索引列，有名称以后就可以不需要这样做了
     data['datetime']= pd.to_datetime(data['datetime'])
+
+
+    #data['value'] =data['value'].map(lambda x: x*1000)
+    index = []
+    for i in range(len(data)):
+        if data.iloc[i, 1]<=0.1 or data.iloc[i, 1]>1:
+            index.append(i)
+    a=data.drop(index=index)
+
+
+
     #新建一个helper datafream来辅助插值
     helper = pd.DataFrame({'datetime': pd.date_range(data['datetime'].min(), data['datetime'].max(),freq='1H')})
     print("helper")
