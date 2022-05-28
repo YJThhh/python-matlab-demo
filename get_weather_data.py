@@ -14,9 +14,9 @@ def GetNextDateString(date):
 
 
 # 请输入日期 (年-月-日):
-date_start = "2022-2-11"
+date_start = "2021-11-15"
 next_date = date_start
-date_end = "2022-2-18"  # 请注意，最后一天不被包含  3月不要写03同理3日
+date_end = "2021-11-18"  # 请注意，最后一天不被包含  3月不要写03同理3日
 
 date_list = []
 
@@ -59,8 +59,9 @@ for date_string in date_list:
         new_row = pd.DataFrame(new_row_dict, index=[0])
         dataFrame = pd.concat([dataFrame, new_row], axis=0, join='outer')
 print("***写入dataFrame完毕")
-order = ["时次", "瞬时温度", "地面气压", "相对湿度", "瞬时风向", "瞬时风速", "1小时极大风速", "1小时降水", "10分钟平均能见度", "积雪深度"]
+order = ["时次", "瞬时温度","相对湿度","瞬时风速","1小时降水"]
 dataFrame = dataFrame[order]
+dataFrame['时次'].apply(lambda x:x[:16])
 dataFrame.to_excel('./data/wether_start_' + date_start + '_end_' + date_end + '.xlsx', index=False)
 
 print("***写入文件完毕")

@@ -46,18 +46,19 @@ if __name__ == '__main__':
     # data.reset_index(inplace=True)
     # data_filled['datatime']=data['datetime']
     #随机森林插值
-    # known_value = data[data['value'].notnull()]
-    # unknown_value = data[data['value'].isnull()]
-    # y = known_value.iloc[:, 0]
-    # y = np.array(y)
-    # X = known_value.iloc[:, 1:5]
-    # X = np.array(X)
-    # rfr = RandomForestRegressor(random_state=0, n_estimators=200, n_jobs=-1)
-    # rfr.fit(X, y)
-    # data.loc[(data['value'].isnull()), 'value'] = rfr.predict(unknown_value.iloc[:, 1:5])
-    # plt.plot([i for i in range(81)],data['value'][2800:2881], color="r")
+    known_value = data[data['value'].notnull()]
+    unknown_value = data[data['value'].isnull()]
+    y = known_value.iloc[:, 0]
+    y = np.array(y)
+    X = known_value.iloc[:, 1:5]
+    X = np.array(X)
+    rfr = RandomForestRegressor(random_state=0, n_estimators=200, n_jobs=-1)
+    rfr.fit(X, y)
+    data.loc[(data['value'].isnull()), 'value'] = rfr.predict(unknown_value.iloc[:, 1:5])
+    # plt.plot([i for i in range(2880)],data['value'], color="r")
     # plt.show()
     data = data.reset_index()#此时data为插值之后的dataframe
+    #滑动平均滤波
     # def moving_average(interval, windowsize):
     #     window = np.ones(int(windowsize)) / float(windowsize)
     #     re = np.convolve(interval, window, 'same')
@@ -81,36 +82,40 @@ if __name__ == '__main__':
         except (TypeError, ValueError):
             pass
     pass
-    X_path = '../data/raw/20-21天气情况_输入.xlsx'
+    X_path = '../data/raw/21-22天气情况_输入.xlsx'#
     if os.path.exists(X_path):
         data_X = pd.read_excel(X_path, header=None)
         data_X = data_X.applymap(ToNumeric)
-        data_X = data_X.drop([0])
+        data_X = data_X.drop([0,len(data_X)-1])
         data_X.index = range(len(data_X))
         Previous_moment_load = data['value'].drop([len(data) - 1])
         data_X['4'] = Previous_moment_load
-        time_variable = data[['year','month', 'day', 'hour']][1:]  # 把月日时也作为特征
+        time_variable = data[['month', 'day','hour']][1:]
         time_variable = time_variable.reset_index()
-        data_X['5'], data_X['6'], data_X['7'] ,data_X['8'] =time_variable['year'], time_variable['month'], time_variable['day'], time_variable['hour']
+        data_X['5'], data_X['6'],data_X['8'] = time_variable['month'],time_variable['day'],time_variable['hour']
+        # time_variable = data[['year','month', 'day', 'hour']][1:]  # 把月日时也作为特征
+        # time_variable = time_variable.reset_index()
+        # data_X['5'], data_X['6'], data_X['7'] ,data_X['8'] =time_variable['year'], time_variable['month'], time_variable['day'], time_variable['hour']
         data_value=data['value'].drop([0])
         data_value=data_value.reset_index(drop=True)
-        data_X['9']=data_value
+        data_X['5']=data_value
 
     # data_Y = pd.DataFrame(data_value)#(data['value'].drop([0]))
     # data_Y = data_Y.reset_index(drop=True)
     # data_Y['Previous_moment_load']=Previous_moment_load
     data_X = data_X.dropna(axis=0,how='any')
 
-    data_Y = pd.DataFrame(data_X['9'])
-    data_X=data_X.drop(columns='9')
-
+    data_Y = pd.DataFrame(data_X['5'])
+    data_X=data_X.drop(columns='5')
+    # X_train=data_X
+    # y_train=data_Y
     test_ratio = 0.2
     # data_Y.to_excel('../data./processed/all_Y' + '.xlsx', index=False)
     X_train, X_test, y_train, y_test = train_test_split(data_X, data_Y,
                                                         test_size=test_ratio,
                                                         random_state=42)
-    #X_train.to_excel('../data./processed/20X_train' + '.xlsx', index=False)
+    # X_train.to_excel('../data./processed/20X_train' + '.xlsx', index=False)
+    # y_train.to_excel('../data./processed/20y_train' + '.xlsx', index=False)
     X_test.to_excel('../data./processed/21X_test' + '.xlsx', index=False)
-    #y_train.to_excel('../data./processed/20y_train' + '.xlsx', index=False)
     y_test.to_excel('../data./processed/21y_test' + '.xlsx', index=False)
 
