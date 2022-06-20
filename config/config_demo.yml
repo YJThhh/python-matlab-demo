@@ -1,0 +1,13 @@
+Path:
+#  XTrainPath: C:\Users\YJT\Desktop\康泽佳苑五号楼低区负荷预测\处理后数据\只有天气情况\X_train.xlsx
+#  XTestPath: C:\Users\YJT\Desktop\康泽佳苑五号楼低区负荷预测\处理后数据\\只有天气情况\X_test.xlsx
+#  YTrainPath: C:\Users\YJT\Desktop\康泽佳苑五号楼低区负荷预测\处理后数据\\只有天气情况\y_train.xlsx
+#  YTestPath: C:\Users\YJT\Desktop\康泽佳苑五号楼低区负荷预测\处理后数据\\只有天气情况\y_test.xlsx
+
+
+
+  XTrainPath: ./data/processed/X_train.xlsx
+  XTestPath: ./data/processed/X_test.xlsx
+  YTrainPath: ./data/processed/y_train.xlsx
+  YTestPath: ./data/processed/y_test.xlsx
+  MatlabProjectRoot: C:/Users/YJT/Desktop/康泽佳苑五号楼低区负荷预测
