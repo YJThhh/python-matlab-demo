@@ -182,10 +182,10 @@ def data_split(data_X, data_Y):
     X_train, X_test, y_train, y_test = train_test_split(data_X, data_Y,
                                                         test_size=test_ratio,
                                                         random_state=42)
-    X_test.to_excel('../data./processed/X_test' + '.xlsx', index=False)
-    y_test.to_excel('../data./processed/y_test' + '.xlsx', index=False)
-    X_train.to_excel('../data./processed/X_train' + '.xlsx', index=False)
-    y_train.to_excel('../data./processed/y_train' + '.xlsx', index=False)
+    X_test.to_excel('../data./processed/X_test' + '.xlsx', index=False,header=None)
+    y_test.to_excel('../data./processed/y_test' + '.xlsx', index=False,header=None)
+    X_train.to_excel('../data./processed/X_train' + '.xlsx', index=False,header=None)
+    y_train.to_excel('../data./processed/y_train' + '.xlsx', index=False,header=None)
     return X_train, X_test, y_train, y_test
 if __name__ == '__main__':
     data_Xtrain, data_Ytrain=process('../data/raw/20_21Accumulated_heat.xlsx','../data/raw/20-21天气情况_输入.xlsx')

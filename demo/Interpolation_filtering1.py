@@ -21,7 +21,7 @@ if __name__ == '__main__':
     if os.path.exists(xlsx_detail_path):
         data = pd.read_excel(xlsx_detail_path,header=None)
     assert data is not None
-    data.columns = ['datetime', 'heat']
+    data.columns = ['datetime', 'heat','flow']
     data['datetime'] = pd.to_datetime(data['datetime'])
     #补上缺失时间行
     helper = pd.DataFrame({'datetime': pd.date_range(data['datetime'].min(), data['datetime'].max(), freq='1H')})
@@ -35,7 +35,18 @@ if __name__ == '__main__':
     data = data.reset_index(drop=True)
     data['value']=data['heat']-(data['heat'].shift(1))
     data.drop(columns='heat',inplace=True)
-    # plt.plot([i for i in range(2880)], data['value'], color="r")
+    fig = plt.figure()
+    ax1 = fig.add_subplot(111)
+    ax1.plot([i for i in range(40)], data['value'][2510:2550], 'r', label="heat");
+    ax1.legend(loc=2)
+    ax1.set_ylabel('heat');
+    ax2 = ax1.twinx()  # this is the important function
+    ax2.plot([i for i in range(40)], data['flow'][2510:2550], 'g', label="flow")
+    ax2.legend(loc=1)
+    ax2.set_ylabel('flow');
+    plt.show()
+    # plt.plot([i for i in range(20)], data['value'][1230:1250]*30, color="b")
+    # plt.plot([i for i in range(20)], data['flow'][1230:1250], color="r")
     # plt.show()
     #滤去值非常夸张那种
     for i in range(len(data)):
